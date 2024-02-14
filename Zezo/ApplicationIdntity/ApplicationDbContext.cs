@@ -22,16 +22,18 @@ namespace Zezo.ApplicationIdntity
             builder.Entity<IdentityRole>().HasData
                
                 (
-                  new IdentityRole() { Id = "1", Name = "Kamel", ConcurrencyStamp = "1", NormalizedName = "Lara" },
+                  new IdentityRole() { Id = "1", Name = "user", ConcurrencyStamp = "1", NormalizedName = "user" },
 
-                  new IdentityRole() { Id = "2", Name = "Lara", ConcurrencyStamp = "2", NormalizedName = "Kamel" },
+                  new IdentityRole() { Id = "2", Name = "admin", ConcurrencyStamp = "2", NormalizedName = "admin" },
 
-                  new IdentityRole() { Id = "3", Name = "Islam", ConcurrencyStamp = "3", NormalizedName = "Islam" },
+                  new IdentityRole() { Id = "3", Name = "teamleader", ConcurrencyStamp = "3", NormalizedName = "teamleader" },
 
-                  new IdentityRole() { Id = "4", Name = "Hatem", ConcurrencyStamp = "3", NormalizedName = "Hatem" },
+                  new IdentityRole() { Id = "4", Name = "manger", ConcurrencyStamp = "3", NormalizedName = "manger" },
 
-                  new IdentityRole() { Id = "5", Name = "basiune", ConcurrencyStamp = "3", NormalizedName = "basiune" }
-                );
+                  new IdentityRole() { Id = "5", Name = "bigmanger", ConcurrencyStamp = "3", NormalizedName = "bigmanger" }
+            
+                  );
+
             builder.Entity<IdentityUserRole<string>>().HasData(
 
 

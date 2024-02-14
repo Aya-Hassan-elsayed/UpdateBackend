@@ -3,12 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OfficeOpenXml;
 using Zezo.ApplicationIdntity;
-using Zezo.Models;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
 using Zezo.Controllers;
 using Microsoft.OpenApi.Models;
+//using Zezo.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<UserController>();
@@ -24,12 +23,11 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+  
 
 
 builder.Services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10));
-
-
+ 
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -51,26 +49,19 @@ builder.Services.AddAuthentication(options =>
 });
 builder.Services.AddSwaggerGen(c =>
 {
+
     c.SwaggerDoc("v1", new OpenApiInfo
     {
+        Title="zezo",
         Version = "v1",
-        Title = "Leader Group Store",
-        Description = "Leader Group Store - APIs documentation ",
-        TermsOfService = null,
-        Contact = new OpenApiContact
-        {
-            Name = "Leader Group Store Team.",
-            Url = new Uri("http://c-systems.com")
-        }
+     
     });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey,
+        Type = SecuritySchemeType.Http,
         Scheme = "Bearer",
         BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"."
     });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -83,16 +74,21 @@ builder.Services.AddSwaggerGen(c =>
                         Id = "Bearer"
                     }
                 },
-                Array.Empty<string>()
+               new string[]{}
         }
     });
 });
-builder.Services.AddDbContext<rsc_v2Context>();
+  
+
+
+
+
+//builder.Services.AddDbContext<RSCContext>();
 
 builder.Services.AddEndpointsApiExplorer();
 
 
-var app = builder.Build();
+var app=builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
@@ -101,7 +97,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(c => c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
 app.UseHttpsRedirection();
+
+
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();

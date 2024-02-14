@@ -11,6 +11,8 @@ using System.Security.Claims;
 using System.Text;
 using Zezo.Dtos;
 using Zezo.Models;
+//using Zezo.Models;
+//using Zezo.Models;
 using Zezo.ViewModel;
 
 namespace Zezo.Controllers
@@ -20,20 +22,20 @@ namespace Zezo.Controllers
     public class ZezoController : ControllerBase
     {
         private readonly rsc_v2Context _context;
-       
-        public ZezoController(rsc_v2Context context, UserManager<IdentityUser> usermanger, RoleManager<IdentityRole> rolemanger, IConfiguration configuration)
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public ZezoController(rsc_v2Context context, UserManager<IdentityUser> userManager)
         {
             _context = context;
-           
+            _userManager = userManager;
         }
 
-        
-        
+
 
 
 
         [HttpPut("updatedLara")]
-        [Authorize(Roles =("Lara,Hatem,basiune"))]
+        [Authorize(Roles = "admin,manager,bigmanger")]
         public async Task<IActionResult> UpdatedLara(IFormFile file)
         {
             var list = new List<Updatedatadto>();
@@ -58,7 +60,7 @@ namespace Zezo.Controllers
                             var printdate = worksheet.Cells[row, 4];
 
                             // Check if any cells in the row are null
-                            if (Id_shepingordercell.Value == null || statusCell.Value == null || printCell.Value == null )
+                            if (Id_shepingordercell.Value == null || statusCell.Value == null || printCell.Value == null)
                             {
                                 return BadRequest($"Oops, Eng Lara, Some values are null in rows {row}. Please check the values equal null and update again.");
 
@@ -154,15 +156,17 @@ namespace Zezo.Controllers
 
         [HttpPut("updatedKamel")]
 
-        [Authorize(Roles= "basiune")]
+        [Authorize(Roles = "user,manger,bigmanger")]
         public async Task<IActionResult> updatedKamel(IFormFile file)
         {
+
+
             var list = new List<Updatedatadto>();
 
 
             using (var stream = new MemoryStream())
             {
-                //var clientIpAddress = _HttpContextAccessor?.HttpContext?.Connection.RemoteIpAddress;
+
                 await file.CopyToAsync(stream);
                 using (var package = new ExcelPackage(stream))
                 {
@@ -209,6 +213,7 @@ namespace Zezo.Controllers
                         {
 
                             // Find the request using the unique request number
+
                             var requestsToUpdateindb = _context.Assignements
                                 .Where(r => r.Requestnumber == item.requestNumber)
                                 .ToList();
@@ -313,7 +318,7 @@ namespace Zezo.Controllers
 
 
         [HttpPut("sha7n")]
-        [Authorize(Roles = "Islam")]
+        [Authorize(Roles = "teamleader,manger,bigmanger")]
         public async Task<IActionResult> updatedtoislam(IFormFile file)
         {
             var list = new List<Updatedatadto>();
@@ -345,7 +350,7 @@ namespace Zezo.Controllers
 
 
                             // Check if cells exist before accessing their values
-                            if (requestnumber.Value != null && CetrCell.Value != null )
+                            if (requestnumber.Value != null && CetrCell.Value != null)
                             {
                                 list.Add(new Updatedatadto
                                 {
@@ -374,7 +379,7 @@ namespace Zezo.Controllers
 
                                 if (short.TryParse(item.cert, out short certValue))
                                 {
-                                    if (certValue == 1 || certValue == 2 || certValue ==3 )
+                                    if (certValue == 1 || certValue == 2 || certValue == 3)
                                     {
                                         requestToUpdate.Cert = certValue;
                                     }
@@ -389,7 +394,7 @@ namespace Zezo.Controllers
 
                                 if (item.Tofedex != null)
                                 {
-                                    if (DateTime.TryParseExact(item.Tofedex,"M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime printDate))
+                                    if (DateTime.TryParseExact(item.Tofedex, "M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime printDate))
                                     {
                                         requestToUpdate.Tofedex = new System.DateOnly(printDate.Year, printDate.Month, printDate.Day);
                                     }
@@ -401,7 +406,7 @@ namespace Zezo.Controllers
                                         return BadRequest("Take Care Pro ,Invalid value for Print_Date. It must be a valid date in the format 'M/d/yyyy '.");
                                     }
                                 }
-                              
+
 
                             }
 
@@ -422,7 +427,8 @@ namespace Zezo.Controllers
             return Ok("Well Done Pro, Updated Successfully.");
         }
 
-        [Authorize(Roles = "Islam,Hatem,basiune")]
+        [Authorize(Roles = "teamleader,manger,bigmanger")]
+
         [HttpPut("e3ada")]
         public async Task<IActionResult> updatedtoislamshipingorderstatus(IFormFile file)
         {
@@ -448,7 +454,7 @@ namespace Zezo.Controllers
                             var TofedexCell = worksheet.Cells[row, 3];
 
 
-                            if (Id_shippingorder.Value == null || reCetrCell.Value == null )
+                            if (Id_shippingorder.Value == null || reCetrCell.Value == null)
 
                             {
                                 return BadRequest($"Oops Pro, Some value is null {row} in the Excel. Please check the values equal null and update again.");
@@ -456,20 +462,20 @@ namespace Zezo.Controllers
 
 
                             // Check if cells exist before accessing their values
-                            if (Id_shippingorder.Value != null && reCetrCell.Value != null )
+                            if (Id_shippingorder.Value != null && reCetrCell.Value != null)
                             {
                                 list.Add(new Updatedatadto
                                 {
                                     Id_shepingorder = Id_shippingorder.Value.ToString().Trim(),
                                     recert = reCetrCell.Value.ToString().Trim(),
-                                    Tofedex = TofedexCell.Value != null? TofedexCell.Value.ToString().Trim():null,
+                                    Tofedex = TofedexCell.Value != null ? TofedexCell.Value.ToString().Trim() : null,
 
 
                                 });
                             }
                         }
 
-                        
+
                         foreach (var item in list)
                         {
 
@@ -484,7 +490,7 @@ namespace Zezo.Controllers
 
                                 if (short.TryParse(item.recert, out short recert))
                                 {
-                                    if (recert == 1 || recert == 2 || recert==3)
+                                    if (recert == 1 || recert == 2 || recert == 3)
                                     {
                                         requestToUpdate.Recert = recert;
                                     }
@@ -495,7 +501,7 @@ namespace Zezo.Controllers
 
                                 }
 
-                                if (item.Tofedex !=null )
+                                if (item.Tofedex != null)
                                 {
                                     if (DateTime.TryParseExact(item.Tofedex, "M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime printDate))
                                     {

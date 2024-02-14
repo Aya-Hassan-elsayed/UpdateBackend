@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
-using Zezo.Models;
+//using Zezo.Models;
 using Zezo.ViewModel;
 
 namespace Zezo.Controllers
@@ -20,13 +23,14 @@ namespace Zezo.Controllers
         private readonly RoleManager<IdentityRole> _rolemanger;
         private readonly IConfiguration _configuration;
 
-        public UserController(rsc_v2Context context, UserManager<IdentityUser> usermanger, RoleManager<IdentityRole> rolemanger, IConfiguration configuration)
+        public UserController(/*rsc_v2Context context,*/ UserManager<IdentityUser> usermanger, RoleManager<IdentityRole> rolemanger, IConfiguration configuration)
         {
 
             _userManager = usermanger;
             _rolemanger = rolemanger;
             _configuration = configuration;
         }
+
 
 
         [HttpPost]
@@ -52,7 +56,7 @@ namespace Zezo.Controllers
                 return Unauthorized("Invalid username or password.");
             }
 
-            var claims = new List<Claim>
+            var authclaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
@@ -61,38 +65,45 @@ namespace Zezo.Controllers
             var userRoles = await _userManager.GetRolesAsync(user);
             foreach (var role in userRoles)
             {
-                claims.Add(new Claim(ClaimTypes.Role, role));
+                authclaims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            var token = GenerateJwtToken(claims);
+            var token = GetToken(authclaims);
 
             return Ok(new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = token.ValidTo
-            });
+                expiration = token.ValidTo,
+                message = "well done pro login successfuly",
+                roles = userRoles  // Add roles to the response
+
+            }) ;
         }
 
-        private JwtSecurityToken GenerateJwtToken(IEnumerable<Claim> claims)
+
+  
+        private JwtSecurityToken GetToken(List<Claim> authclaims)
         {
-            var jwtSettings = _configuration.GetSection("JWT");
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
-            var issuer = jwtSettings["Issuer"];
-            var audience = jwtSettings["Audience"];
-            var expirationInMinutes = Convert.ToDouble(jwtSettings["DurationInMinutes"]);
-
+            var authsigningkey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
+           
             var token = new JwtSecurityToken(
-                issuer: issuer,
-                audience: audience,
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(expirationInMinutes),
-                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
-            );
+                 
+                issuer: _configuration["JWT:Issuer"],
+                audience: _configuration["JWT:Audience"],
+                expires: DateTime.Now.AddHours(20),
+                claims: authclaims,
+                signingCredentials: new SigningCredentials(authsigningkey, SecurityAlgorithms.HmacSha256)
 
+                );
             return token;
         }
 
 
+
+
+      
+         
+         
 
 
         //[HttpPost]

@@ -21,5 +21,6 @@ namespace Zezo.Models
         public string? CommentCompany { get; set; }
         public string? CommentSend { get; set; }
         public string? CommentRsc { get; set; }
+        public string? ReceiveComment { get; set; }
     }
 }
