@@ -180,15 +180,15 @@ namespace Zezo.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3edd48a4-b7cb-4873-b8b5-045a5b1fd706",
+                            ConcurrencyStamp = "b650f9a7-afdb-4d1d-8c0e-04b27f4c0440",
                             Email = "kamel@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "KAMEL@GMAIL.COM",
                             NormalizedUserName = "KAMEL",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIY5zq8AfCuw+TeENdeso5EYEeHtQ4yxBuyV9Ye+I9s5pBbs1QfqPpwScgEQpkeloA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOKG0yRQAf7FEdt0LH5k3nO78ogpJ8vd8e8KtqU3cq/FlhIGoaZJLmt9suBZV5S3mg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "82c2c170-deef-46dc-99fc-fe8fd9f13e30",
+                            SecurityStamp = "587d8c38-8fc6-4e9e-ab6b-4d03a0e14bcd",
                             TwoFactorEnabled = false,
                             UserName = "Kamel"
                         },
@@ -196,15 +196,15 @@ namespace Zezo.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "24f27ac2-b575-4821-90b7-394adb30b9f5",
+                            ConcurrencyStamp = "0d91013b-fa8b-458f-8e17-5ee6ef125a2d",
                             Email = "Lara@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "Lara@GMAIL.COM",
                             NormalizedUserName = "Lara",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFGwgVg6bzDGbFd5UIUC3hm55oyBt45creDy/foTuNUQ/aUaP2tkfsdr7JmBilHrvw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEH+qfCV32XmOuC/HOdbjX4d6ujXOBDznJ+QwJkOkfH5c3PwCr0oZpprLWK2twrCF6Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "8ae7cf63-f7a5-4303-9ffd-ae42ec17df89",
+                            SecurityStamp = "da1de5f9-7e3f-470c-841f-00e7efb15c54",
                             TwoFactorEnabled = false,
                             UserName = "Lara"
                         },
@@ -212,15 +212,15 @@ namespace Zezo.Migrations
                         {
                             Id = "3",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "bd90d73b-c798-4805-b6ae-2f4463c48e28",
+                            ConcurrencyStamp = "f2263a98-8d1b-4a9f-9fe0-c165014353cd",
                             Email = "islam@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "islam@GMAIL.COM",
                             NormalizedUserName = "islam",
-                            PasswordHash = "AQAAAAEAACcQAAAAELKFN/V3gPAZc567O6bWxOysuOvVddrK5qBMSdYZGkv9NGK6EWkxby8q8JAUYWRHow==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJ0Yu576bIu3RK238HPrd2X9bCzA5QO1Iqkf7FWWyi2Fb51jF2+rqeoGnj7XJMknSA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "265f7b6e-e7a2-4855-b54a-d0832ec1760d",
+                            SecurityStamp = "7d9dac61-cbb6-4505-bffd-d5a4add1061f",
                             TwoFactorEnabled = false,
                             UserName = "islam"
                         },
@@ -228,15 +228,15 @@ namespace Zezo.Migrations
                         {
                             Id = "4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5aeb6882-6f17-45dd-aa62-275d042a7624",
+                            ConcurrencyStamp = "2b42e92f-b735-4b9c-8a17-cb3ae8104dd3",
                             Email = "caphatem@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "caphatem@GMAIL.COM",
                             NormalizedUserName = "caphatem",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKEfyhaB4PEdSUtExTkyWjoAEfS3sLyYpmGLncrQNTgM5UMpYqrjwEHkXjfLdP8tLA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELQvw+QnoknAUnRQeYT2ec7a/kW+LP+Cwt79FveuD6JcQIQm7fNqCM0RHSL7AYka2A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ce9ed7fc-1d6d-41a0-9a5e-8d84986c5f0b",
+                            SecurityStamp = "facc25c3-a28c-4b95-bcf7-81fe8d933be5",
                             TwoFactorEnabled = false,
                             UserName = "caphatem"
                         },
@@ -244,15 +244,15 @@ namespace Zezo.Migrations
                         {
                             Id = "5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c928b3ac-9b26-4dbb-8f6b-a62342de3b27",
+                            ConcurrencyStamp = "30aaa1bc-d961-443b-aaed-616c8c596335",
                             Email = "capbasuoni@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "capbasuoni@GMAIL.COM",
                             NormalizedUserName = "capbasuoni",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMOdDmVbIeIKKoRcDgckcSS/8ogDNIuEOsPR6EB2am6YF29J3QyyT7MCO7ktma395A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEElqZ7X9zpKZtkl7rOlLLzqSj2YUM/kqBP94jQsOanJb5kX9oMMrVoVHB6gZNPNAZQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "9e89c29b-c588-40d2-82a4-372f90521e46",
+                            SecurityStamp = "134fb97c-2b4a-40f0-ab40-3e6c54615f0a",
                             TwoFactorEnabled = false,
                             UserName = "capbasuoni"
                         });
@@ -364,6 +364,33 @@ namespace Zezo.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Zezo.Dtos.ExcelUpdateLog", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<string>("FileContentpath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RecordsUpdated")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("ExcelUpdateLogs");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

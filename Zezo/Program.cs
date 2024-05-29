@@ -7,24 +7,26 @@ using Microsoft.AspNetCore.Identity;
 using System.Text;
 using Zezo.Controllers;
 using Microsoft.OpenApi.Models;
-//using Zezo.Models;
+using Zezo.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<UserController>();
 builder.Services.AddCors();
+
+
+
 builder.Services.AddControllers();
+
 
 ExcelPackage.LicenseContext = LicenseContext.Commercial;
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
-
+builder.Services.AddDbContext<rsc_v2Context>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-  
-
 
 builder.Services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10));
  
@@ -81,20 +83,22 @@ builder.Services.AddSwaggerGen(c =>
   
 
 
-
-
-//builder.Services.AddDbContext<RSCContext>();
-
 builder.Services.AddEndpointsApiExplorer();
 
 
 var app=builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
+
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+
+//}
+
+
+
+
 
 app.UseCors(c => c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 

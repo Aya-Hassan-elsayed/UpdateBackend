@@ -12,8 +12,8 @@ using Zezo.ApplicationIdntity;
 namespace Zezo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240204120322_Initial")]
-    partial class Initial
+    [Migration("20240529074518_AddecxelpathMig")]
+    partial class AddecxelpathMig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,24 +53,38 @@ namespace Zezo.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2485b228-0135-4530-9c42-40b7cb95358d",
+                            Id = "1",
                             ConcurrencyStamp = "1",
-                            Name = "User",
-                            NormalizedName = "User"
+                            Name = "user",
+                            NormalizedName = "user"
                         },
                         new
                         {
-                            Id = "6e07cb23-f196-4687-bcd2-df7ab65935b1",
+                            Id = "2",
                             ConcurrencyStamp = "2",
-                            Name = "Admin",
-                            NormalizedName = "Admin"
+                            Name = "admin",
+                            NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "69801999-5c8c-4d10-ba1f-a74316559c4f",
+                            Id = "3",
                             ConcurrencyStamp = "3",
-                            Name = "Manger",
-                            NormalizedName = "Manger"
+                            Name = "teamleader",
+                            NormalizedName = "teamleader"
+                        },
+                        new
+                        {
+                            Id = "4",
+                            ConcurrencyStamp = "3",
+                            Name = "manger",
+                            NormalizedName = "manger"
+                        },
+                        new
+                        {
+                            Id = "5",
+                            ConcurrencyStamp = "3",
+                            Name = "bigmanger",
+                            NormalizedName = "bigmanger"
                         });
                 });
 
@@ -162,6 +176,88 @@ namespace Zezo.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "b650f9a7-afdb-4d1d-8c0e-04b27f4c0440",
+                            Email = "kamel@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "KAMEL@GMAIL.COM",
+                            NormalizedUserName = "KAMEL",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOKG0yRQAf7FEdt0LH5k3nO78ogpJ8vd8e8KtqU3cq/FlhIGoaZJLmt9suBZV5S3mg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "587d8c38-8fc6-4e9e-ab6b-4d03a0e14bcd",
+                            TwoFactorEnabled = false,
+                            UserName = "Kamel"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "0d91013b-fa8b-458f-8e17-5ee6ef125a2d",
+                            Email = "Lara@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "Lara@GMAIL.COM",
+                            NormalizedUserName = "Lara",
+                            PasswordHash = "AQAAAAEAACcQAAAAEH+qfCV32XmOuC/HOdbjX4d6ujXOBDznJ+QwJkOkfH5c3PwCr0oZpprLWK2twrCF6Q==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "da1de5f9-7e3f-470c-841f-00e7efb15c54",
+                            TwoFactorEnabled = false,
+                            UserName = "Lara"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "f2263a98-8d1b-4a9f-9fe0-c165014353cd",
+                            Email = "islam@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "islam@GMAIL.COM",
+                            NormalizedUserName = "islam",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJ0Yu576bIu3RK238HPrd2X9bCzA5QO1Iqkf7FWWyi2Fb51jF2+rqeoGnj7XJMknSA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "7d9dac61-cbb6-4505-bffd-d5a4add1061f",
+                            TwoFactorEnabled = false,
+                            UserName = "islam"
+                        },
+                        new
+                        {
+                            Id = "4",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "2b42e92f-b735-4b9c-8a17-cb3ae8104dd3",
+                            Email = "caphatem@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "caphatem@GMAIL.COM",
+                            NormalizedUserName = "caphatem",
+                            PasswordHash = "AQAAAAEAACcQAAAAELQvw+QnoknAUnRQeYT2ec7a/kW+LP+Cwt79FveuD6JcQIQm7fNqCM0RHSL7AYka2A==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "facc25c3-a28c-4b95-bcf7-81fe8d933be5",
+                            TwoFactorEnabled = false,
+                            UserName = "caphatem"
+                        },
+                        new
+                        {
+                            Id = "5",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "30aaa1bc-d961-443b-aaed-616c8c596335",
+                            Email = "capbasuoni@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "capbasuoni@GMAIL.COM",
+                            NormalizedUserName = "capbasuoni",
+                            PasswordHash = "AQAAAAEAACcQAAAAEElqZ7X9zpKZtkl7rOlLLzqSj2YUM/kqBP94jQsOanJb5kX9oMMrVoVHB6gZNPNAZQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "134fb97c-2b4a-40f0-ab40-3e6c54615f0a",
+                            TwoFactorEnabled = false,
+                            UserName = "capbasuoni"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -224,6 +320,33 @@ namespace Zezo.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "1",
+                            RoleId = "1"
+                        },
+                        new
+                        {
+                            UserId = "2",
+                            RoleId = "2"
+                        },
+                        new
+                        {
+                            UserId = "3",
+                            RoleId = "3"
+                        },
+                        new
+                        {
+                            UserId = "4",
+                            RoleId = "4"
+                        },
+                        new
+                        {
+                            UserId = "5",
+                            RoleId = "5"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -243,6 +366,33 @@ namespace Zezo.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Zezo.Dtos.ExcelUpdateLog", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<string>("FileContentpath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RecordsUpdated")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("ExcelUpdateLogs");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

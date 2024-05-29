@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Zezo.Dtos;
 
 namespace Zezo.ApplicationIdntity
 {
@@ -9,14 +10,16 @@ namespace Zezo.ApplicationIdntity
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
+        public DbSet<ExcelUpdateLog> ExcelUpdateLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            
             SeedRoles(builder);
             SeedUser(builder);
         }
-
+ 
         protected static void SeedRoles(ModelBuilder builder)
         {
             builder.Entity<IdentityRole>().HasData
@@ -44,6 +47,7 @@ namespace Zezo.ApplicationIdntity
                 new IdentityUserRole<string>() { RoleId = "5", UserId = "5" });
                 
         }
+
 
         protected static void SeedUser(ModelBuilder builder)
         {
@@ -78,6 +82,7 @@ namespace Zezo.ApplicationIdntity
                     EmailConfirmed = true,
                     PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, "Z_islam_1234567")
                 },
+
                   new IdentityUser
                   {
                       Id = "4",

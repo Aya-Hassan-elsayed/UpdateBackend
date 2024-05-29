@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Zezo.Migrations
 {
-    public partial class Initial : Migration
+    public partial class first : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -46,6 +46,21 @@ namespace Zezo.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ExcelUpdateLogs",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RecordsUpdated = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExcelUpdateLogs", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -91,7 +106,7 @@ namespace Zezo.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserLogins", 
+                name: "AspNetUserLogins",
                 columns: table => new
                 {
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -157,17 +172,38 @@ namespace Zezo.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "2485b228-0135-4530-9c42-40b7cb95358d", "1", "User", "User" });
+                values: new object[,]
+                {
+                    { "1", "1", "user", "user" },
+                    { "2", "2", "admin", "admin" },
+                    { "3", "3", "teamleader", "teamleader" },
+                    { "4", "3", "manger", "manger" },
+                    { "5", "3", "bigmanger", "bigmanger" }
+                });
 
             migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "69801999-5c8c-4d10-ba1f-a74316559c4f", "3", "Manger", "Manger" });
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "1", 0, "5fa3c487-e540-4864-837c-8f7d2a8a45a4", "kamel@gmail.com", true, false, null, "KAMEL@GMAIL.COM", "KAMEL", "AQAAAAEAACcQAAAAEGYioCP0h3KWPWXax1riH1qcC/p9Sewor30mI/l9Qk+MnG2zD0xafPV7EGgfcIn8AA==", null, false, "3f21dc59-d115-4922-bd9c-f4a5f12f3eec", false, "Kamel" },
+                    { "2", 0, "86ceb1d7-e924-4a52-a64f-bfa651624437", "Lara@gmail.com", true, false, null, "Lara@GMAIL.COM", "Lara", "AQAAAAEAACcQAAAAEAUcRGDZh6Tr4CxkyvJhsHkEFM3blTongsOg4MJnmb/oP4HfJ6e41j2KbKeMQP3v2w==", null, false, "1bfa5ff3-7349-4049-9b31-053958208e29", false, "Lara" },
+                    { "3", 0, "0f6fdd9e-f748-4b3b-8b70-04ff9134bf93", "islam@gmail.com", true, false, null, "islam@GMAIL.COM", "islam", "AQAAAAEAACcQAAAAELeaKmHPkcETvmSmva19lhcx/2eJXmKRel7ImvSS7U/cEdakOPGpsWL2r9OJZ+UMJg==", null, false, "7448b652-a5e1-4fd8-834d-f6ef76ecf79b", false, "islam" },
+                    { "4", 0, "54e901a3-cd15-4530-9cfa-2a53e40ea410", "caphatem@gmail.com", true, false, null, "caphatem@GMAIL.COM", "caphatem", "AQAAAAEAACcQAAAAEH0C2fXX/aqR4Jhex9t9BcCeUpD2EV6snIzVsCt9EaidjV7Xg8NbRlVH+1LA+WzSsg==", null, false, "8a82f3b3-671a-42da-aa4a-fb20bd7ce17b", false, "caphatem" },
+                    { "5", 0, "d9ff2ef9-f3cc-4c4f-a7a0-490291ccefd4", "capbasuoni@gmail.com", true, false, null, "capbasuoni@GMAIL.COM", "capbasuoni", "AQAAAAEAACcQAAAAELtHrjod5nMHmJfffY8ANpYunM5Dt2l7EFrnbR5tDgUPCtSu+Ceicqi40xzH5jQheg==", null, false, "c9e3bd61-132d-411e-a3cb-33dfa7e74f11", false, "capbasuoni" }
+                });
 
             migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "6e07cb23-f196-4687-bcd2-df7ab65935b1", "2", "Admin", "Admin" });
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[,]
+                {
+                    { "1", "1" },
+                    { "2", "2" },
+                    { "3", "3" },
+                    { "4", "4" },
+                    { "5", "5" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -225,6 +261,9 @@ namespace Zezo.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "ExcelUpdateLogs");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

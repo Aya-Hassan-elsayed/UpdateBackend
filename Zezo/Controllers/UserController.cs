@@ -25,13 +25,10 @@ namespace Zezo.Controllers
 
         public UserController(/*rsc_v2Context context,*/ UserManager<IdentityUser> usermanger, RoleManager<IdentityRole> rolemanger, IConfiguration configuration)
         {
-
             _userManager = usermanger;
             _rolemanger = rolemanger;
             _configuration = configuration;
         }
-
-
 
         [HttpPost]
         [Route("Login")]
@@ -59,8 +56,12 @@ namespace Zezo.Controllers
             var authclaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName),
+
+                new Claim(ClaimTypes.NameIdentifier, user.Id), // Add NameIdentifier claim
+
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
+
 
             var userRoles = await _userManager.GetRolesAsync(user);
             foreach (var role in userRoles)
@@ -76,7 +77,6 @@ namespace Zezo.Controllers
                 expiration = token.ValidTo,
                 message = "well done pro login successfuly",
                 roles = userRoles  // Add roles to the response
-
             }) ;
         }
 
