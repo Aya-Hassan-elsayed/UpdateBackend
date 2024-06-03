@@ -32,29 +32,54 @@ namespace Zezo.Controllers
         public IActionResult getlogtabel(string? username)
         {
 
-            if (username != null)
+                if (username != null)
+                {
+                    var isexcting = _contextuser.ExcelUpdateLogs.FirstOrDefault(c => c.UserName == username);
+
+                    if (isexcting == null)
+                    {
+                        return NotFound("sorry , this user not found");
+                    }
+                    else
+                    {
+                        var user = _contextuser.ExcelUpdateLogs.Where(u => u.UserName == isexcting.UserName).OrderByDescending(x=>x.UpdatedAt).ToList();
+                        return Ok(user);
+                    }
+
+                }
+            else
             {
-                var isexcting = _contextuser.ExcelUpdateLogs.FirstOrDefault(c => c.UserName == username);
+                return BadRequest("Username parameter is required.");
+            }
+
+
+        }
+
+
+        [HttpGet("GetLogWithDate")]
+        [Authorize(Roles = ("manger,bigmanger"))]
+        public IActionResult getlogtabelwithDate(DateTime updatedDate)
+        {
+
+            if (updatedDate != null)
+            {
+                var dateOnly = updatedDate.Date;
+                var isexcting = _contextuser.ExcelUpdateLogs.FirstOrDefault(c => c.UpdatedAt.Date == dateOnly);
 
                 if (isexcting == null)
                 {
-                    return NotFound("sorry , this user not found");
+                    return NotFound("sorry , No Data inserted this date");
                 }
                 else
                 {
-                    var user = _contextuser.ExcelUpdateLogs.Where(u => u.UserName == isexcting.UserName).ToList();
-                    return Ok(user);
+                    var logDate = _contextuser.ExcelUpdateLogs.Where(u => u.UpdatedAt.Date == isexcting.UpdatedAt.Date).OrderByDescending(x => x.UpdatedAt).ToList();
+                    return Ok(logDate);
                 }
 
             }
-
             else
-
             {
-
-                var logtable = _contextuser.ExcelUpdateLogs.ToList().OrderByDescending(u => u.id);
-
-                return Ok(logtable);
+                return BadRequest("Date is required.");
             }
 
 
@@ -70,7 +95,7 @@ namespace Zezo.Controllers
                 var user = await _userManager.GetUserAsync(User);
                 var list = new List<Updatedatadto>();
 
-                var networkPath = @"\\10.100.102.70\عام\عام\0نقيب محمد\زيزو خاص بالمركز\re_print";
+                var networkPath = @"\\10.100.102.70\update_logs\re_print";
 
                 // Create the directory if it doesn't exist
                 if (!Directory.Exists(networkPath))
@@ -246,7 +271,7 @@ namespace Zezo.Controllers
                 var user = await _userManager.GetUserAsync(User);
                 var list = new List<Updatedatadto>();
 
-            var networkPath = @"\\10.100.102.70\عام\عام\0نقيب محمد\زيزو خاص بالمركز\shipping";
+            var networkPath = @"\\10.100.102.70\update_logs\shipping";
 
             // Create the directory if it doesn't exist
             if (!Directory.Exists(networkPath))
@@ -371,7 +396,7 @@ namespace Zezo.Controllers
                 var list = new List<Updatedatadto>();
 
 
-                var networkPath = @"\\10.100.102.70\عام\عام\0نقيب محمد\زيزو خاص بالمركز\print";
+                var networkPath = @"\\10.100.102.70\update_logs\print";
 
                 // Create the directory if it doesn't exist
                 if (!Directory.Exists(networkPath))
@@ -559,7 +584,7 @@ namespace Zezo.Controllers
                 var user = await _userManager.GetUserAsync(User);
                 var list = new List<Updatedatadto>();
 
-                var networkPath = @"\\10.100.102.70\عام\عام\0نقيب محمد\زيزو خاص بالمركز\re_shipping";
+                var networkPath = @"\\10.100.102.70\update_logs\re_shipping";
 
                 // Create the directory if it doesn't exist
                 if (!Directory.Exists(networkPath))

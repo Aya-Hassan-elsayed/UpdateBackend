@@ -8,6 +8,7 @@ using System.Text;
 using Zezo.Controllers;
 using Microsoft.OpenApi.Models;
 using Zezo.Models;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<UserController>();
@@ -80,7 +81,15 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-  
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "MyAllowSpecificOrigins",
+                        builder =>
+                        {
+                            builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                        });
+});
 
 
 builder.Services.AddEndpointsApiExplorer();
@@ -96,14 +105,9 @@ var app=builder.Build();
 
 //}
 
-
-
-
-
 app.UseCors(c => c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 app.UseHttpsRedirection();
-
 
 app.UseAuthentication();
 
