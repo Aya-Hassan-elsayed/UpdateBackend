@@ -14,6 +14,8 @@ namespace Zezo.Dtos
         public int RecordsUpdated { get; set; }
         public string FileContentpath { get; set; } // New property to store the Excel file
 
+        [MaxLength(150)]
+        public string PcName { get; set; }
 
 
     }

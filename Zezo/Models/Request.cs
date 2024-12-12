@@ -28,5 +28,7 @@ namespace Zezo.Models
         public string? Landarea { get; set; }
         public BitArray? Hasinquiryrequest { get; set; }
         public int? Assigned { get; set; }
+        public double? Paymentdifferenceamount { get; set; }
+        public int Paymentstatus { get; set; }
     }
 }

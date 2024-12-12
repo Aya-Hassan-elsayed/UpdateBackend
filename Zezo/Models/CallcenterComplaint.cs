@@ -11,5 +11,8 @@ namespace Zezo.Models
         public string? Requestnumber { get; set; }
         public int? ComplaintType { get; set; }
         public int? ComplaintStatus { get; set; }
+        public string? RscReplay { get; set; }
+        public string? RscStatus { get; set; }
+        public string? SubType { get; set; }
     }
 }

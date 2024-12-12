@@ -15,6 +15,8 @@ namespace Zezo.Models
         public double? Subunittypearea { get; set; }
         public double? Price { get; set; }
         public DateOnly? Tofedex { get; set; }
+        public int? SubStatus { get; set; }
+        public string? Recert { get; set; }
         public string? Cert { get; set; }
         public string? Orderstatuss { get; set; }
         public int? Orderstatus { get; set; }

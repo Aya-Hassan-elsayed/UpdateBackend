@@ -27,7 +27,7 @@ namespace Zezo.Models
         public DateOnly? CretRecievedMsd { get; set; }
         public int? SurveyReviewMsd { get; set; }
         public int? RefuseReason { get; set; }
-        public int? DifferenceAreaStatus { get; set; }
+        public int? RefuseCountEdit { get; set; }
         public int? ReviewAfterExtraction { get; set; }
         public DateOnly? AcceptedDate { get; set; }
         public DateOnly? PrintDate { get; set; }
@@ -43,6 +43,7 @@ namespace Zezo.Models
         public short? PrintStatus { get; set; }
         public short? Repeatrefuse { get; set; }
         public char? SeragLetters { get; set; }
-        public string? Com { get; set; }
+        public string? RevsionEmployee { get; set; }
+        public int? RefuseCountNew { get; set; }
     }
 }

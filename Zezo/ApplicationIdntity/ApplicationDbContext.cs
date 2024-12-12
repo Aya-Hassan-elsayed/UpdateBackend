@@ -14,8 +14,7 @@ namespace Zezo.ApplicationIdntity
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
-            
+            base.OnModelCreating(builder);         
             SeedRoles(builder);
             SeedUser(builder);
         }
@@ -103,8 +102,6 @@ namespace Zezo.ApplicationIdntity
                         EmailConfirmed = true,
                         PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, "bas_1234567")
                     }
-
-
             );
         }
 

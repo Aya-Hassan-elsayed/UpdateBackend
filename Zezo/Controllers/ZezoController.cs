@@ -1,14 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using Zezo.ApplicationIdntity;
 using Zezo.Dtos;
 using Zezo.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 
 namespace Zezo.Controllers
@@ -27,66 +30,130 @@ namespace Zezo.Controllers
             _userManager = userManager;
         }
 
+        //new update with Ranaa for download file
         [HttpGet("getlogdata")]
-        [Authorize(Roles =("manger,bigmanger"))]
-        public IActionResult getlogtabel(string? username)
-        {
-
-                if (username != null)
-                {
-                    var isexcting = _contextuser.ExcelUpdateLogs.FirstOrDefault(c => c.UserName == username);
-
-                    if (isexcting == null)
-                    {
-                        return NotFound("sorry , this user not found");
-                    }
-                    else
-                    {
-                        var user = _contextuser.ExcelUpdateLogs.Where(u => u.UserName == isexcting.UserName).OrderByDescending(x=>x.UpdatedAt).ToList();
-                        return Ok(user);
-                    }
-
-                }
-            else
-            {
-                return BadRequest("Username parameter is required.");
-            }
-
-
-        }
-
-
-        [HttpGet("GetLogWithDate")]
         [Authorize(Roles = ("manger,bigmanger"))]
-        public IActionResult getlogtabelwithDate(DateTime updatedDate)
+        public IActionResult getlogtabel(string? username, DateTime? addedDate)
         {
-
-            if (updatedDate != null)
+            if (username != null)
             {
-                var dateOnly = updatedDate.Date;
-                var isexcting = _contextuser.ExcelUpdateLogs.FirstOrDefault(c => c.UpdatedAt.Date == dateOnly);
+                var isexcting = _contextuser.ExcelUpdateLogs.FirstOrDefault(c => c.UserName == username);
 
                 if (isexcting == null)
                 {
-                    return NotFound("sorry , No Data inserted this date");
+                    return NotFound("sorry , this user not found");
                 }
                 else
                 {
-                    var logDate = _contextuser.ExcelUpdateLogs.Where(u => u.UpdatedAt.Date == isexcting.UpdatedAt.Date).OrderByDescending(x => x.UpdatedAt).ToList();
-                    return Ok(logDate);
+                    var user = _contextuser.ExcelUpdateLogs.Where(u => u.UserName == isexcting.UserName).OrderByDescending(x => x.UpdatedAt)
+                        .Select(c => new
+                        {
+                            username = c.UserName,
+                            updatedat = c.UpdatedAt,
+                            recordscount = c.RecordsUpdated,
+                            filePath = c.FileContentpath,
+                            fileDownloadUrl = Url.Action("RDownloadFile", new { filePath = c.FileContentpath })
+                        });
+                    return Ok(user);
                 }
 
             }
+            if (addedDate != null)
+            {
+                var filterdat = _contextuser.ExcelUpdateLogs.Where(u => u.UpdatedAt.Date == addedDate.Value.Date)
+                    .Select(c => new
+                    {
+                        username = c.UserName,
+                        updatedat = c.UpdatedAt,
+                        recordscount = c.RecordsUpdated,
+                        filePath = c.FileContentpath,
+                        fileDownloadUrl = Url.Action("RDownloadFile", new { filePath = c.FileContentpath })
+                    });
+                return Ok(filterdat);
+            }
             else
             {
-                return BadRequest("Date is required.");
+                int pageNumber = 1; // Example page numberc
+                int pageSize = 10; // Example page size
+
+                var logDate = _contextuser.ExcelUpdateLogs
+                    .OrderByDescending(x => x.UpdatedAt) // Order by UpdatedAt descending
+                    .Skip((pageNumber - 1) * pageSize) // Skip records based on page number
+                    .Take(pageSize)
+                    .Select(c => new
+                    {
+                        username = c.UserName,
+                        updatedat = c.UpdatedAt,
+                        recordscount = c.RecordsUpdated,
+                        filePath = c.FileContentpath,
+                        fileDownloadUrl = Url.Action("RDownloadFile", new { filePath = c.FileContentpath })
+                    });// Take records based on page size
+                return Ok(logDate);
             }
+        }
+
+        //public IActionResult getlogtabel(string? username, DateTime? addedDate)
+        //{
+
+        //    if (username != null)
+        //    {
+        //        var isexcting = _contextuser.ExcelUpdateLogs.FirstOrDefault(c => c.UserName == username);
+
+        //        if (isexcting == null)
+        //        {
+        //            return NotFound("sorry , this user not found");
+        //        }
+        //        else
+        //        {
+        //            var user = _contextuser.ExcelUpdateLogs.Where(u => u.UserName == isexcting.UserName).OrderByDescending(x => x.UpdatedAt).ToList();
+        //            return Ok(user);
+        //        }
+
+        //    }
+        //    if (addedDate != null)
+        //    {
+        //        var filterdat = _contextuser.ExcelUpdateLogs.Where(u => u.UpdatedAt.Date == addedDate.Value.Date);
+        //        return Ok(filterdat);
+        //    }
+        //    else
+        //    {
+        //        int pageNumber = 1; // Example page numberc
+        //        int pageSize = 10; // Example page size
+
+        //        var logDate = _contextuser.ExcelUpdateLogs
+
+        //            .OrderByDescending(x => x.UpdatedAt) // Order by UpdatedAt descending
+        //            .Skip((pageNumber - 1) * pageSize) // Skip records based on page number
+        //            .Take(pageSize) // Take records based on page size
+        //            .ToList();
+
+        //        return Ok(logDate);
+        //    }
+        //}
 
 
+
+        // Added With Ranaa
+        [HttpGet("DownloadFile")]
+        public IActionResult RDownloadFile(string filePath)
+        {
+            // Check if the file path exists
+            if (!string.IsNullOrEmpty(filePath) && System.IO.File.Exists(filePath))
+            {
+                // Generate a file stream for the Excel file
+                var fileStream = new FileStream(filePath, FileMode.Open);
+
+                // Return the Excel file as a FileStreamResult
+                return File(fileStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Path.GetFileName(filePath));
+            }
+            else
+            {
+                return NotFound("File not found.");
+            }
         }
 
         [HttpPut("updatedLara")]
-        [Authorize(Roles = "admin,manger,bigmanger")]
+        //  [Authorize(Roles = "admin,manger,bigmanger")]
         public async Task<IActionResult> UpdatedLara(IFormFile file)
         {
             try
@@ -135,7 +202,7 @@ namespace Zezo.Controllers
 
                                 }
 
-     
+
 
                                 // Cells are not null, proceed to add to the list
                                 list.Add(new Updatedatadto
@@ -193,7 +260,7 @@ namespace Zezo.Controllers
                                         }
                                     }
 
-                                   
+
 
 
                                     if (item.Print_Date != null)
@@ -210,7 +277,7 @@ namespace Zezo.Controllers
                                     }
 
 
-                                  
+
 
                                     // Update other properties as needed
                                 }
@@ -224,14 +291,17 @@ namespace Zezo.Controllers
                             {
                                 if (user != null)
                                 {
+                                    string hostName = Dns.GetHostName();
                                     var log = new ExcelUpdateLog
                                     {
                                         // id =Convert.ToInt32(user.Id) ,
                                         UserName = user.UserName,
                                         UpdatedAt = DateTime.Now,
-                                        RecordsUpdated = rowCount - 1 ,
-                                        FileContentpath = filePath
-
+                                        RecordsUpdated = rowCount - 1,
+                                        FileContentpath = filePath,
+                                        // PcName = Environment.MachineName ,
+                                        // PcName = HttpContext.Connection.RemoteIpAddress?.ToString()
+                                        PcName = Dns.GetHostByName(hostName).AddressList[0].ToString()
                                     };
 
                                     _contextuser.ExcelUpdateLogs.Add(log);
@@ -267,9 +337,9 @@ namespace Zezo.Controllers
         public async Task<IActionResult> updatedtoislam(IFormFile file)
         {
 
-           
-                var user = await _userManager.GetUserAsync(User);
-                var list = new List<Updatedatadto>();
+
+            var user = await _userManager.GetUserAsync(User);
+            var list = new List<Updatedatadto>();
 
             var networkPath = @"\\10.100.102.70\update_logs\shipping";
 
@@ -279,7 +349,7 @@ namespace Zezo.Controllers
                 Directory.CreateDirectory(networkPath);
             }
 
-           
+
 
             var filePath = Path.Combine(networkPath, file.FileName);
 
@@ -292,96 +362,98 @@ namespace Zezo.Controllers
 
 
             using (var stream = new MemoryStream())
-                {
+            {
 
                 await file.CopyToAsync(stream);
-                    using (var package = new ExcelPackage(stream))
+                using (var package = new ExcelPackage(stream))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+                    if (worksheet == null)
                     {
-                        ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
-                        if (worksheet == null)
+                        return BadRequest("Worksheet is null.");
+                    }
+
+                    var rowCount = worksheet.Dimension.Rows;
+                    for (int row = 2; row <= rowCount; row++)
+                    {
+                        var requestnumber = worksheet.Cells[row, 1];
+                        var CetrCell = worksheet.Cells[row, 2];
+                        var TofedexCell = worksheet.Cells[row, 3];
+
+
+
+
+                        if (requestnumber?.Value == null || CetrCell?.Value == null)
                         {
-                            return BadRequest("Worksheet is null.");
+                            return BadRequest($"Oops pro, Some value is null in row {row} in the Excel. Please check the values and update again.");
                         }
 
-                        var rowCount = worksheet.Dimension.Rows;
-                        for (int row = 2; row <= rowCount; row++)
+                        list.Add(new Updatedatadto
                         {
-                            var requestnumber = worksheet.Cells[row, 1];
-                            var CetrCell = worksheet.Cells[row, 2];
-                            var TofedexCell = worksheet.Cells[row, 3];
+                            requestNumber = requestnumber.Value.ToString().Trim(),
+                            cert = CetrCell.Value.ToString().Trim(),
+                            Tofedex = TofedexCell?.Value?.ToString().Trim()
+                        });
+                    }
 
+                    foreach (var item in list)
+                    {
+                        var requestsToUpdateindb = _context.Assignements
+                            .Where(r => r.Requestnumber == item.requestNumber)
+                            .ToList();
 
-
-
-                            if (requestnumber?.Value == null || CetrCell?.Value == null)
-                            {
-                                return BadRequest($"Oops pro, Some value is null in row {row} in the Excel. Please check the values and update again.");
-                            }
-
-                            list.Add(new Updatedatadto
-                            {
-                                requestNumber = requestnumber.Value.ToString().Trim(),
-                                cert = CetrCell.Value.ToString().Trim(),
-                                Tofedex = TofedexCell?.Value?.ToString().Trim()
-                            });
-                        }
-
-                        foreach (var item in list)
+                        foreach (var requestToUpdate in requestsToUpdateindb)
                         {
-                            var requestsToUpdateindb = _context.Assignements
-                                .Where(r => r.Requestnumber == item.requestNumber)
-                                .ToList();
-
-                            foreach (var requestToUpdate in requestsToUpdateindb)
+                            if (short.TryParse(item.cert, out short certValue))
                             {
-                                if (short.TryParse(item.cert, out short certValue))
+                                if (certValue == 1 || certValue == 2 || certValue == 3)
                                 {
-                                    if (certValue == 1 || certValue == 2 || certValue == 3)
-                                    {
-                                        requestToUpdate.Cert = certValue;
-                                    }
-                                    else
-                                    {
-                                        return BadRequest("OOPS Pro, Invalid value for Tawheed. It must be either 1, 2, or 3.");
-                                    }
+                                    requestToUpdate.Cert = certValue;
                                 }
-
-                                if (item.Tofedex != null)
+                                else
                                 {
-                                    if (DateTime.TryParseExact(item.Tofedex, "M/d/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime printDate) ||
-                                       DateTime.TryParseExact(item.Tofedex, "M/d/yyyy h:m:s tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out printDate))
-                                    {
-                                        requestToUpdate.Tofedex = new DateOnly(printDate.Year, printDate.Month, printDate.Day);
-                                    }
-                                    else
-                                    {
-                                        return BadRequest("Take Care Pro, Invalid value for Print_Date. It must be a valid date in the format 'M/d/yyyy'.");
-                                    }
+                                    return BadRequest("OOPS Pro, Invalid value for Tawheed. It must be either 1, 2, or 3.");
                                 }
                             }
 
-                            await _context.SaveChangesAsync();
-                        }
-
-                        if (user != null)
-                        {
-                            var log = new ExcelUpdateLog
+                            if (item.Tofedex != null)
                             {
-                                UserName = user.UserName,
-                                UpdatedAt = DateTime.Now,
-                                RecordsUpdated = rowCount - 1,                           
-                                FileContentpath  = filePath
-                            };
-
-                            _contextuser.ExcelUpdateLogs.Add(log);
-                            await _contextuser.SaveChangesAsync();
+                                if (DateTime.TryParseExact(item.Tofedex, "M/d/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime printDate) ||
+                                   DateTime.TryParseExact(item.Tofedex, "M/d/yyyy h:m:s tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out printDate))
+                                {
+                                    requestToUpdate.Tofedex = new DateOnly(printDate.Year, printDate.Month, printDate.Day);
+                                }
+                                else
+                                {
+                                    return BadRequest("Take Care Pro, Invalid value for Print_Date. It must be a valid date in the format 'M/d/yyyy'.");
+                                }
+                            }
                         }
+
+                        await _context.SaveChangesAsync();
+                    }
+
+                    if (user != null)
+                    {
+                        var log = new ExcelUpdateLog
+                        {
+                            UserName = user.UserName,
+                            UpdatedAt = DateTime.Now,
+                            RecordsUpdated = rowCount - 1,
+                            FileContentpath = filePath,
+                            PcName = Environment.MachineName
+
+                        };
+
+                        _contextuser.ExcelUpdateLogs.Add(log);
+                        await _contextuser.SaveChangesAsync();
                     }
                 }
-                return Ok("Well Done Pro, Updated Successfully.");
-            
-          
-           
+            }
+            return Ok("Well Done Pro, Updated Successfully.");
+
+
+
         }
 
         [HttpPut("updatedKamel")]
@@ -415,7 +487,7 @@ namespace Zezo.Controllers
                 {
 
                     byte[] fileContent = stream.ToArray();
-                 
+
                     await file.CopyToAsync(stream);
                     using (var package = new ExcelPackage(stream))
                     {
@@ -433,8 +505,8 @@ namespace Zezo.Controllers
                                 var surveyreview = worksheet.Cells[row, 4];
                                 var printdate = worksheet.Cells[row, 5];
 
-                               
- 
+
+
 
                                 // Check if cells exist before accessing their values
                                 if (requestnumber.Value != null && TawhedCell.Value != null && print_statusCell.Value != null && surveyreview.Value != null && printdate.Value != null)
@@ -510,7 +582,7 @@ namespace Zezo.Controllers
                                         }
                                     }
 
-                                   
+
 
                                     if (item.Print_Date != null)
                                     {
@@ -519,7 +591,7 @@ namespace Zezo.Controllers
                                         {
 
                                             requestToUpdate.PrintDate = new System.DateOnly(printDate.Year, printDate.Month, printDate.Day);
-                                          
+
                                         }
                                         else
                                         {
@@ -542,8 +614,9 @@ namespace Zezo.Controllers
                                         // id =Convert.ToInt32(user.Id) ,
                                         UserName = user.UserName,
                                         UpdatedAt = DateTime.Now,
-                                        RecordsUpdated = rowCount - 1 ,
-                                        FileContentpath = filePath
+                                        RecordsUpdated = rowCount - 1,
+                                        FileContentpath = filePath,
+                                        PcName = Environment.MachineName
 
                                     };
 
@@ -577,6 +650,7 @@ namespace Zezo.Controllers
 
         [Authorize(Roles = "teamleader,manger,bigmanger")]
         [HttpPut("e3ada")]
+
         public async Task<IActionResult> updatedtoislamshipingorderstatus(IFormFile file)
         {
             try
@@ -594,7 +668,9 @@ namespace Zezo.Controllers
 
                 var filePath = Path.Combine(networkPath, file.FileName);
 
+
                 // Save the uploaded file to the network path
+
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     await file.CopyToAsync(fileStream);
@@ -632,7 +708,9 @@ namespace Zezo.Controllers
                                     {
                                         Id_shepingorder = Id_shippingorder.Value.ToString().Trim(),
                                         recert = reCetrCell.Value.ToString().Trim(),
-                                        Tofedex = TofedexCell.Value != null ? TofedexCell.Value.ToString().Trim() : null,
+                                        Tofedex = TofedexCell.Value != null ? TofedexCell.Value.ToString().Trim() : null
+                                        //  Tofedex = TofedexCell.Value.ToString().Trim()
+
                                     });
                                 }
                             }
@@ -643,6 +721,7 @@ namespace Zezo.Controllers
                                 var requestsToUpdateindb = _context.ShippingordersStatuses
                                     .Where(r => r.IdShippingorder.ToString() == item.Id_shepingorder)
                                     .ToList();
+
 
                                 foreach (var requestToUpdate in requestsToUpdateindb)
                                 {
@@ -660,19 +739,20 @@ namespace Zezo.Controllers
 
                                     }
 
-                                 
-                                    if (item.Print_Date != null)
+
+                                    if (item.Tofedex != null)
                                     {
-                                        if (DateTime.TryParseExact(item.Print_Date, "M/d/yyyy h:m:s tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime printDate) ||
-                                            DateTime.TryParseExact(item.Print_Date, "M/d/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out printDate))
+                                        if (DateTime.TryParseExact(item.Tofedex, "M/d/yyyy h:m:s tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime printDate) ||
+                                            DateTime.TryParseExact(item.Tofedex, "M/d/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out printDate))
                                         {
-                                            requestToUpdate.PrintDate = new System.DateOnly(printDate.Year, printDate.Month, printDate.Day);
+                                            requestToUpdate.Tofedex = new System.DateOnly(printDate.Year, printDate.Month, printDate.Day);
                                         }
                                         else
                                         {
                                             return BadRequest("Take Care Pro, Invalid value for Print_Date. It must be a valid date in the format 'M/d/yyyy h:m:s tt' or 'M/d/yyyy'.");
                                         }
                                     }
+
                                 }
                             }
                             await _context.SaveChangesAsync();
@@ -686,8 +766,9 @@ namespace Zezo.Controllers
                                         // id =Convert.ToInt32(user.Id) ,
                                         UserName = user.UserName,
                                         UpdatedAt = DateTime.Now,
-                                        RecordsUpdated = rowCount - 1 ,
-                                        FileContentpath = filePath
+                                        RecordsUpdated = rowCount - 1,
+                                        FileContentpath = filePath,
+                                        PcName = Environment.MachineName
                                     };
 
                                     _contextuser.ExcelUpdateLogs.Add(log);

@@ -10,7 +10,7 @@ namespace Zezo.Models
         public string? Requestnumber { get; set; }
         public string? Name { get; set; }
         public int? CompanyId { get; set; }
-        public DateTime? Addeddate { get; set; }
+        public DateTime? Modifieddate { get; set; }
         public string? Paidstatus { get; set; }
         public double? Numberofcopies { get; set; }
         public double? Extracopiesprice { get; set; }
@@ -21,6 +21,8 @@ namespace Zezo.Models
         public string? Comment { get; set; }
         public DateTime? CommentTime { get; set; }
         public int? Status { get; set; }
+        public string? EditEmployee { get; set; }
+        public string? Done { get; set; }
         public string? Statuss { get; set; }
         public DateOnly? StatusDate { get; set; }
         public long? PrintStatus { get; set; }

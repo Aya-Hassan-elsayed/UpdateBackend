@@ -29,7 +29,9 @@ namespace Zezo.Models
         public DateOnly? DueDate { get; set; }
         public int? CompanyId { get; set; }
         public int? Collected { get; set; }
+        public DateOnly? PrintDate { get; set; }
         public int? SurveyReview { get; set; }
+        public string? Com { get; set; }
         public string? Confirmed { get; set; }
         public string? Companyname { get; set; }
         public string? AreaMCategory { get; set; }
@@ -47,6 +49,7 @@ namespace Zezo.Models
         public int? Certt { get; set; }
         public int? SendReview { get; set; }
         public string? AttachLayout { get; set; }
+        public string? Validuser { get; set; }
         public string? Certtt { get; set; }
         public DateOnly? Tofedex { get; set; }
         public DateOnly? AcceptedDate { get; set; }

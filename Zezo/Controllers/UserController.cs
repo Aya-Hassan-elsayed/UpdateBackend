@@ -18,7 +18,6 @@ namespace Zezo.Controllers
     public class UserController : ControllerBase
     {
 
-
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _rolemanger;
         private readonly IConfiguration _configuration;
@@ -34,6 +33,7 @@ namespace Zezo.Controllers
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
+
             if (loginModel == null || string.IsNullOrEmpty(loginModel.UserName) || string.IsNullOrEmpty(loginModel.Password))
             {
                 return BadRequest("Username and password are required.");

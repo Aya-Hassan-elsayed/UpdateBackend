@@ -5,10 +5,13 @@ namespace Zezo.Models
 {
     public partial class CallcenterView
     {
+        public string? Requestnumber { get; set; }
         public int? Id { get; set; }
         public int? RequestId { get; set; }
-        public string? Requestnumber { get; set; }
         public int? Confirmed { get; set; }
+        public string? ComplaintStatus { get; set; }
+        public string? Done { get; set; }
+        public string? Cert { get; set; }
         public string? RequestStatus { get; set; }
         public DateOnly? Shippingdate { get; set; }
         public DateTime? CallcenterConfirmTime { get; set; }
@@ -34,6 +37,7 @@ namespace Zezo.Models
         public int? Companyid { get; set; }
         public string? Companyname { get; set; }
         public string? Adress { get; set; }
+        public string? SubType { get; set; }
         public string? Name { get; set; }
         public string? Phone { get; set; }
         public string? Email { get; set; }

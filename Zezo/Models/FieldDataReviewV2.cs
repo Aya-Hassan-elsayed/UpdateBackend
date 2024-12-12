@@ -12,7 +12,13 @@ namespace Zezo.Models
         public DateOnly? DueDate { get; set; }
         public int? SurveyReview { get; set; }
         public int? CollectedRequest { get; set; }
+        public DateOnly? PrintDate { get; set; }
+        public int? DifferenceAreaStatus { get; set; }
+        public string? RevsionEmployee { get; set; }
+        public string? Cert { get; set; }
+        public string? Done { get; set; }
         public DateTime? SurveyTime { get; set; }
+        public string? QcEmployee { get; set; }
         public string? SurveyReviewStatus { get; set; }
         public string? Requestnumber { get; set; }
         public double? Area { get; set; }
@@ -66,5 +72,6 @@ namespace Zezo.Models
         public short? PrintStatus { get; set; }
         public short? Repeatrefuse { get; set; }
         public string? Serag { get; set; }
+        public int? Geom { get; set; }
     }
 }

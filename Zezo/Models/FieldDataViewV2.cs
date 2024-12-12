@@ -67,12 +67,12 @@ namespace Zezo.Models
         public string? Westernborderlength { get; set; }
         public int? SendReview { get; set; }
         public string? AfterExtraction { get; set; }
-        public int? Cert { get; set; }
+        public string? Cert { get; set; }
         public int? CompanyId { get; set; }
         public int? Requestid { get; set; }
         public int? Districtid { get; set; }
         public int? Regionid { get; set; }
-        public int? Requestidd { get; set; }
         public int? Governorateid { get; set; }
+        public int? Geom { get; set; }
     }
 }

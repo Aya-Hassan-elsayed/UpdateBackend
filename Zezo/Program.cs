@@ -11,15 +11,17 @@ using Zezo.Models;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddScoped<UserController>();
-builder.Services.AddCors();
-
-
 
 builder.Services.AddControllers();
 
-
-ExcelPackage.LicenseContext = LicenseContext.Commercial;
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy(name: "MyAllowSpecificOrigins",
+//                        builder =>
+//                        {
+//                            builder.WithOrigins( "http://10.100.102.30:5031").AllowAnyMethod().AllowAnyHeader();
+//                        });
+//});
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -30,7 +32,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10));
- 
+
+
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddScoped<UserController>();
+ExcelPackage.LicenseContext = LicenseContext.Commercial;
+
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -50,14 +59,24 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]))
     };
 });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "MyAllowSpecificOrigins",
+                        builder =>
+                        {
+                            builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                        });
+});
+
 builder.Services.AddSwaggerGen(c =>
 {
 
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title="zezo",
+        Title = "zezo",
         Version = "v1",
-     
+
     });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -82,32 +101,24 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: "MyAllowSpecificOrigins",
-                        builder =>
-                        {
-                            builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-                        });
-});
+var app = builder.Build();
 
-
-builder.Services.AddEndpointsApiExplorer();
-
-
-var app=builder.Build();
 
 //if (app.Environment.IsDevelopment())
 //{
-
-    app.UseSwagger();
-    app.UseSwaggerUI();
-
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
 //}
 
-app.UseCors(c => c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+
+app.UseCors("MyAllowSpecificOrigins");
+app.UseRouting();
+
 
 app.UseAuthentication();
 

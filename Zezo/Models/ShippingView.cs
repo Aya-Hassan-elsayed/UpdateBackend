@@ -34,6 +34,7 @@ namespace Zezo.Models
         public DateOnly? Tofedex { get; set; }
         public DateOnly? CretRecievedMsd { get; set; }
         public int? SurveyReview { get; set; }
+        public string? Done { get; set; }
         public string? Companyname { get; set; }
         public string? Cert { get; set; }
         public string? SurveyReviewStatus { get; set; }

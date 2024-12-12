@@ -71,8 +71,9 @@ namespace Zezo.Models
         public float? AreaG { get; set; }
         public short? Usage { get; set; }
         public string? AttachCadImg { get; set; }
-        public string? Validuser { get; set; }
+        public string? QcEmployee { get; set; }
         public string? Validdate { get; set; }
         public string? ImageRefuse { get; set; }
+        public string? RefuseType { get; set; }
     }
 }
