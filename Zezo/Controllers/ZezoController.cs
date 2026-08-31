@@ -30,7 +30,6 @@ namespace Zezo.Controllers
             _userManager = userManager;
         }
 
-        //new update with Ranaa for download file
         [HttpGet("getlogdata")]
         [Authorize(Roles = ("manger,bigmanger"))]
         public IActionResult getlogtabel(string? username, DateTime? addedDate)
@@ -153,7 +152,7 @@ namespace Zezo.Controllers
         }
 
         [HttpPut("updatedLara")]
-        //  [Authorize(Roles = "admin,manger,bigmanger")]
+         [Authorize(Roles = "admin,manger,bigmanger")]
         public async Task<IActionResult> UpdatedLara(IFormFile file)
         {
             try
@@ -162,20 +161,20 @@ namespace Zezo.Controllers
                 var user = await _userManager.GetUserAsync(User);
                 var list = new List<Updatedatadto>();
 
-                var networkPath = @"\\10.100.102.70\update_logs\re_print";
+               // var networkPath = @"\\10.100.102.70\update_logs\re_print";
 
                 // Create the directory if it doesn't exist
-                if (!Directory.Exists(networkPath))
-                {
-                    Directory.CreateDirectory(networkPath);
-                }
-                var filePath = Path.Combine(networkPath, file.FileName);
+               // if (!Directory.Exists(networkPath))
+               // {
+                //    Directory.CreateDirectory(networkPath);
+               // }
+                //var filePath = Path.Combine(networkPath, file.FileName);
 
                 // Save the uploaded file to the network path
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(fileStream);
-                }
+               // using (var fileStream = new FileStream(filePath, FileMode.Create))
+               // {
+                  //  await file.CopyToAsync(fileStream);
+                //}
 
                 using (var stream = new MemoryStream())
                 {
@@ -296,16 +295,17 @@ namespace Zezo.Controllers
                                     {
                                         // id =Convert.ToInt32(user.Id) ,
                                         UserName = user.UserName,
-                                        UpdatedAt = DateTime.Now,
+                                        UpdatedAt = DateTime.UtcNow,
                                         RecordsUpdated = rowCount - 1,
-                                        FileContentpath = filePath,
+                                        // FileContentpath = filePath,
+                                        FileContentpath=file.FileName,
                                         // PcName = Environment.MachineName ,
                                         // PcName = HttpContext.Connection.RemoteIpAddress?.ToString()
                                         PcName = Dns.GetHostByName(hostName).AddressList[0].ToString()
                                     };
 
                                     _contextuser.ExcelUpdateLogs.Add(log);
-                                    _contextuser.SaveChanges();
+                                    await _contextuser.SaveChangesAsync();
                                 }
                             }
                             catch (Exception ex)
@@ -341,23 +341,23 @@ namespace Zezo.Controllers
             var user = await _userManager.GetUserAsync(User);
             var list = new List<Updatedatadto>();
 
-            var networkPath = @"\\10.100.102.70\update_logs\shipping";
+           // var networkPath = @"\\10.100.102.70\update_logs\shipping";
 
             // Create the directory if it doesn't exist
-            if (!Directory.Exists(networkPath))
-            {
-                Directory.CreateDirectory(networkPath);
-            }
+           // if (!Directory.Exists(networkPath))
+           // {
+               // Directory.CreateDirectory(networkPath);
+           // }
 
 
 
-            var filePath = Path.Combine(networkPath, file.FileName);
+            //var filePath = Path.Combine(networkPath, file.FileName);
 
             // Save the uploaded file to the network path
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(fileStream);
-            }
+           // using (var fileStream = new FileStream(filePath, FileMode.Create))
+           // {
+               // await file.CopyToAsync(fileStream);
+            //}
 
 
 
@@ -438,9 +438,9 @@ namespace Zezo.Controllers
                         var log = new ExcelUpdateLog
                         {
                             UserName = user.UserName,
-                            UpdatedAt = DateTime.Now,
+                            UpdatedAt = DateTime.UtcNow,
                             RecordsUpdated = rowCount - 1,
-                            FileContentpath = filePath,
+                           FileContentpath = file.FileName,
                             PcName = Environment.MachineName
 
                         };
@@ -468,20 +468,20 @@ namespace Zezo.Controllers
                 var list = new List<Updatedatadto>();
 
 
-                var networkPath = @"\\10.100.102.70\update_logs\print";
+                //var networkPath = @"\\10.100.102.70\update_logs\print";
 
                 // Create the directory if it doesn't exist
-                if (!Directory.Exists(networkPath))
-                {
-                    Directory.CreateDirectory(networkPath);
-                }
-                var filePath = Path.Combine(networkPath, file.FileName);
+                //if (!Directory.Exists(networkPath))
+               // {
+                   // Directory.CreateDirectory(networkPath);
+               // }
+               // var filePath = Path.Combine(networkPath, file.FileName);
 
                 // Save the uploaded file to the network path
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(fileStream);
-                }
+                //using (var fileStream = new FileStream(filePath, FileMode.Create))
+               // {
+                 //   await file.CopyToAsync(fileStream);
+                //}
 
                 using (var stream = new MemoryStream())
                 {
@@ -613,15 +613,15 @@ namespace Zezo.Controllers
                                     {
                                         // id =Convert.ToInt32(user.Id) ,
                                         UserName = user.UserName,
-                                        UpdatedAt = DateTime.Now,
+                                        UpdatedAt = DateTime.UtcNow,
                                         RecordsUpdated = rowCount - 1,
-                                        FileContentpath = filePath,
+                                        FileContentpath = file.FileName,
                                         PcName = Environment.MachineName
 
                                     };
 
                                     _contextuser.ExcelUpdateLogs.Add(log);
-                                    _contextuser.SaveChanges();
+                                    await _contextuser.SaveChangesAsync();
                                 }
                             }
                             catch (Exception ex)
@@ -648,8 +648,8 @@ namespace Zezo.Controllers
             }
         }
 
-        [Authorize(Roles = "teamleader,manger,bigmanger")]
         [HttpPut("e3ada")]
+        [Authorize(Roles = "teamleader,manger,bigmanger")]
 
         public async Task<IActionResult> updatedtoislamshipingorderstatus(IFormFile file)
         {
@@ -658,23 +658,23 @@ namespace Zezo.Controllers
                 var user = await _userManager.GetUserAsync(User);
                 var list = new List<Updatedatadto>();
 
-                var networkPath = @"\\10.100.102.70\update_logs\re_shipping";
+               // var networkPath = @"\\10.100.102.70\update_logs\re_shipping";
 
                 // Create the directory if it doesn't exist
-                if (!Directory.Exists(networkPath))
-                {
-                    Directory.CreateDirectory(networkPath);
-                }
+               // if (!Directory.Exists(networkPath))
+               // {
+                   // Directory.CreateDirectory(networkPath);
+              //  }
 
-                var filePath = Path.Combine(networkPath, file.FileName);
+                //var filePath = Path.Combine(networkPath, file.FileName);
 
 
                 // Save the uploaded file to the network path
 
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(fileStream);
-                }
+                //using (var fileStream = new FileStream(filePath, FileMode.Create))
+                //{
+                  //  await file.CopyToAsync(fileStream);
+               // }
 
                 using (var stream = new MemoryStream())
                 {
@@ -765,14 +765,14 @@ namespace Zezo.Controllers
                                     {
                                         // id =Convert.ToInt32(user.Id) ,
                                         UserName = user.UserName,
-                                        UpdatedAt = DateTime.Now,
+                                        UpdatedAt = DateTime.UtcNow,
                                         RecordsUpdated = rowCount - 1,
-                                        FileContentpath = filePath,
+                                        FileContentpath = file.FileName,
                                         PcName = Environment.MachineName
                                     };
 
                                     _contextuser.ExcelUpdateLogs.Add(log);
-                                    _contextuser.SaveChanges();
+                                    await _contextuser.SaveChangesAsync();
                                 }
                             }
                             catch (Exception ex)

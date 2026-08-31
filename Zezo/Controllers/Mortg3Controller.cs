@@ -29,32 +29,32 @@ namespace Zezo.Controllers
         public async Task<ActionResult> update_Assign(IFormFile file)
         {
             var user = await _userManger.GetUserAsync(User);
-            var networkPath = @"\\10.100.102.70\update_logs\New_Orders";
+           // var networkPath = @"\\10.100.102.70\update_logs\New_Orders";
             var listupdate = new List<UpdateMortg3>();
 
 
-            if (file == null)
-            {
-                return BadRequest("Plz insert Excel File .. ");
-            }
-            if (!Path.GetExtension(file.FileName).Equals(".xlsx", System.StringComparison.OrdinalIgnoreCase))
-            {
-                return BadRequest("Please make sure that the uploaded file is an Excel file (.xlsx) ");
-            }
-            if (!Directory.Exists(networkPath))
-            {
-                Directory.CreateDirectory(networkPath);
-            }
+           // if (file == null)
+           // {
+           //     return BadRequest("Plz insert Excel File .. ");
+          //  }
+         //   if (!Path.GetExtension(file.FileName).Equals(".xlsx", System.StringComparison.OrdinalIgnoreCase))
+           // {
+              //  return BadRequest("Please make sure that the uploaded file is an Excel file (.xlsx) ");
+           // }
+           // if (!Directory.Exists(networkPath))
+            //{
+             //   Directory.CreateDirectory(networkPath);
+           // }
 
-            var FileName = Path.GetFileNameWithoutExtension(file.FileName);
-            var File_Extenssion = Path.GetExtension(file.FileName);
-            var FullName = FileName + File_Extenssion;
-            var FilePath = Path.Combine(networkPath, FullName);
+            //var FileName = Path.GetFileNameWithoutExtension(file.FileName);
+            //var File_Extenssion = Path.GetExtension(file.FileName);
+           // var FullName = FileName + File_Extenssion;
+          //  var FilePath = Path.Combine(networkPath, FullName);
 
 
-            using (var fileStream = new FileStream(FilePath, FileMode.Create))
+            //using (var fileStream = new FileStream(FilePath, FileMode.Create))
             {
-                await file.CopyToAsync(fileStream);
+               // await file.CopyToAsync(fileStream);
                 using (var stream = new MemoryStream())
                 {
                     await file.CopyToAsync(stream);
@@ -116,14 +116,14 @@ namespace Zezo.Controllers
                                     var log = new ExcelUpdateLog
                                     {
                                         UserName = user.UserName,
-                                        UpdatedAt = DateTime.Now,
+                                        UpdatedAt = DateTime.UtcNow,
                                         RecordsUpdated = rowCount - 1,
-                                        FileContentpath = FilePath ,
+                                        FileContentpath = file.FileName ,
                                         PcName = Dns.GetHostByName(hostName).AddressList[0].ToString()
                                     };
 
                                     _usercontext.ExcelUpdateLogs.Add(log);
-                                    _usercontext.SaveChanges();
+                                    await _usercontext.SaveChangesAsync();
 
                                 }
                             }
@@ -144,33 +144,33 @@ namespace Zezo.Controllers
         
         {
             var user = await _userManger.GetUserAsync(User);
-            var networkPath = @"\\10.100.102.70\update_logs\Re_Orders";
-            var listupdate = new List<UpdateMortg3>();
+           // var networkPath = @"\\10.100.102.70\update_logs\Re_Orders";
+           var listupdate = new List<UpdateMortg3>();
 
 
-            if (file == null)
-            {
-                return BadRequest("Plz insert Excel File .. ");
-            }
-            if (!Path.GetExtension(file.FileName).Equals(".xlsx", System.StringComparison.OrdinalIgnoreCase))
-            {
-                return BadRequest("Please make sure that the uploaded file is an Excel file (.xlsx) ");
-            }
-            if (!Directory.Exists(networkPath))
-            {
-                Directory.CreateDirectory(networkPath);
-            }
+           // if (file == null)
+            //{
+             //   return BadRequest("Plz insert Excel File .. ");
+           // }
+           // if (!Path.GetExtension(file.FileName).Equals(".xlsx", System.StringComparison.OrdinalIgnoreCase))
+           // {
+             //   return BadRequest("Please make sure that the uploaded file is an Excel file (.xlsx) ");
+           // }
+           // if (!Directory.Exists(networkPath))
+           // {
+              //  Directory.CreateDirectory(networkPath);
+           // }
 
-            var FileName = Path.GetFileNameWithoutExtension(file.FileName);
-            var File_Extenssion = Path.GetExtension(file.FileName);
-            var FullName = FileName + File_Extenssion;
-            var FilePath = Path.Combine(networkPath, FullName);
+           // var FileName = Path.GetFileNameWithoutExtension(file.FileName);
+           // var File_Extenssion = Path.GetExtension(file.FileName);
+            //var FullName = FileName + File_Extenssion;
+           // var FilePath = Path.Combine(networkPath, FullName);
 
 
-            using (var fileStream = new FileStream(FilePath, FileMode.Create))
-            {
-                await file.CopyToAsync(fileStream);
-                using (var stream = new MemoryStream())
+           // using (var fileStream = new FileStream(FilePath, FileMode.Create))
+           // {
+              //await file.CopyToAsync(fileStream);
+               using (var stream = new MemoryStream())
                 {
                     await file.CopyToAsync(stream);
 
@@ -231,14 +231,14 @@ namespace Zezo.Controllers
                                     var log = new ExcelUpdateLog
                                     {
                                         UserName = user.UserName,
-                                        UpdatedAt = DateTime.Now,
+                                        UpdatedAt = DateTime.UtcNow,
                                         RecordsUpdated = rowCount - 1,
-                                        FileContentpath = FilePath ,
+                                        FileContentpath = file.FileName ,
                                         PcName = Dns.GetHostByName(hostName).AddressList[0].ToString()
                                     };
 
                                     _usercontext.ExcelUpdateLogs.Add(log);
-                                    _usercontext.SaveChanges();
+                                    await _usercontext.SaveChangesAsync();
 
                                 }
                             }
@@ -253,4 +253,3 @@ namespace Zezo.Controllers
             }
         }
     }
-}
